@@ -88,8 +88,8 @@ class Home extends Component {
                 <Row>
                     <Col>
                         {this.state.status == "charging"
-                            ? <Button onClick={this.stopCharge}>STOP</Button>
-                            : <Button onClick={this.startCharge}>START</Button>
+                            ? <Button onClick={this.stopCharge}>Stop Charge</Button>
+                            : <Button onClick={this.startCharge}>Start Charge</Button>
                         }
                     </Col>
                 </Row>
