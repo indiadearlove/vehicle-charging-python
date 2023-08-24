@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Col, Container, Row } from "reactstrap";
+import {Button, Col, Container, Row} from "reactstrap";
 
 import axios from "axios";
 
-import {VEHICLE_URL} from "../constants";
+import {STOP_CHARGE_URL, VEHICLE_URL, START_CHARGE_URL} from "../constants";
 
 class Home extends Component {
   state = {
@@ -22,13 +22,80 @@ class Home extends Component {
             companyName: res.data.company_name,
             companyColour: res.data.company_brand_colour_main,
             battery: res.data.battery_percentage,
+            status: res.data?.charge?.status,
+            startTime: res.data?.charge?.start_time,
+            batteryIncrease: res.data?.charge?.estimated_battery_increase_percentage,
         }
     ));
   };
 
+  getStartTime() {
+      let date = new Date(this.state?.startTime);
+      return date.toLocaleTimeString();
+  }
+
   resetState = () => {
     this.getVehicle();
   };
+
+  stopCharge = e => {
+    e.preventDefault();
+    axios.get(STOP_CHARGE_URL).then(() => {
+      this.resetState();
+    });
+  }
+
+  startCharge = e => {
+    e.preventDefault();
+    axios.get(START_CHARGE_URL).then(() => {
+      this.resetState();
+    });
+  }
+
+  pluggedIn() {
+      return (
+          <div>
+              <Row>
+                  <Col>
+                    Battery Increase
+                  </Col>
+                  <Col>
+                    {this.state.batteryIncrease}%
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                      {this.state.status == "charging"
+                            ? "Status"
+                            : "Next Charge"
+                      }
+                  </Col>
+                  <Col>
+                      {this.state.status == "charging"
+                            ? this.state?.status
+                            : this.getStartTime()
+                      }
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                      Vehicle Type
+                  </Col>
+                  <Col>
+                    {this.state.vehicle}
+                  </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        {this.state.status == "charging"
+                            ? <Button onClick={this.stopCharge}>STOP</Button>
+                            : <Button onClick={this.startCharge}>START</Button>
+                        }
+                    </Col>
+                </Row>
+          </div>
+      );
+  }
 
   // Very rarely do I usually do inline styling but cut a corner here for speed
 
@@ -48,22 +115,7 @@ class Home extends Component {
             {this.state.battery}%
           </Col>
         </Row>
-        <Row>
-          <Col>
-            Status
-          </Col>
-          <Col>
-            Charging
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-              Vehicle Type
-          </Col>
-          <Col>
-            {this.state.vehicle}
-          </Col>
-        </Row>
+          {this.state?.status ? this.pluggedIn() : ""}
       </Container>
     );
   }

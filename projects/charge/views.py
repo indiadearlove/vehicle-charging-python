@@ -1,3 +1,6 @@
+from django.utils import timezone
+from datetime import timedelta
+
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -26,5 +29,48 @@ def vehicle_detail(request, pk):
         data = Vehicle.objects.get(pk=pk)
 
         serializer = VehicleSerializer(data, context={'request': request})
+
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def stop_charge(request, pk):
+
+    if request.method == 'GET':
+        vehicle = Vehicle.objects.get(pk=pk)
+        charge = vehicle.charge
+        charge.end_time = timezone.now()
+        charge.status = "cancelled"
+        charge.save()
+
+        Charge.objects.create(
+            status="created",
+            # In reality the start time would be worked out some
+            # other way from the data we have about peak charging hours
+            start_time=timezone.now() + timedelta(hours=1),
+            expected_end_time=timezone.now() + timedelta(hours=3),
+            estimated_battery_increase_percentage=20,
+            vehicle=vehicle,
+        )
+
+        serializer = VehicleSerializer(vehicle, context={'request': request})
+
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def start_charge(request, pk):
+    if request.method == 'GET':
+        vehicle = Vehicle.objects.get(pk=pk)
+        charge = vehicle.charge
+        charge.delete()
+
+        Charge.objects.create(
+            status="charging",
+            start_time=timezone.now(),
+            estimated_battery_increase_percentage=20,
+            expected_end_time=timezone.now() + timedelta(hours=1),
+            vehicle=vehicle,
+        )
+
+        serializer = VehicleSerializer(vehicle, context={'request': request})
 
         return Response(serializer.data)

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from projects.company.models import Company
 
@@ -17,7 +18,7 @@ class Vehicle(models.Model):
         return Charge.objects.get(status="Created", vehicle=self)
 
     def plug_in(self):
-        Charge(
+        Charge.objects.create(
             status="Created",
             start_time=timezone.now(),
             expected_end_time=timezone.now(),
@@ -25,10 +26,14 @@ class Vehicle(models.Model):
         )
 
     def plug_remove(self):
-        charge = Charge.objects.get(status__in=["Created", "Charging"], vehicle=self)
+        charge = self.charge
         charge.end_time = timezone.now()
         charge.status = "Cancelled"
         charge.save()
+
+    @property
+    def charge(self):
+        return Charge.objects.get(status__in=["created", "charging"], vehicle=self)
 
 
 class Charge(models.Model):
@@ -42,6 +47,8 @@ class Charge(models.Model):
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
     expected_end_time = models.DateTimeField(null=True, blank=True)
+    # we could do this with Kwh but I assume the user will want it in a percentage
+    estimated_battery_increase_percentage = models.IntegerField(null=True, blank=False)
     vehicle = models.ForeignKey(Vehicle, null=True, blank=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=50, choices=CHARGE_STATUS)
 

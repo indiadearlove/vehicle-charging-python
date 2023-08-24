@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 
-from projects.charge.views import vehicle_list, vehicle_detail
+from projects.charge.views import vehicle_list, vehicle_detail, stop_charge, start_charge
 from projects.company.views import company_list, company_detail
 
 urlpatterns = [
@@ -25,4 +25,6 @@ urlpatterns = [
     re_path(r'^api/company/([0-9])$', company_detail),
     re_path(r'^api/vehicle/$', vehicle_list),
     re_path(r'^api/vehicle/([0-9])$', vehicle_detail),
+    re_path(r'^api/stop_vehicle_charge/([0-9])$', stop_charge),
+    re_path(r'^api/start_vehicle_charge/([0-9])$', start_charge),
 ]
