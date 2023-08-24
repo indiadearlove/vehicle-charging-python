@@ -5,8 +5,13 @@ from projects.company.models import Company
 
 class Vehicle(models.Model):
     vehicle_type = models.CharField(max_length=50)
+    battery_percentage = models.IntegerField(null=True, blank=False)
     user = models.CharField(max_length=50)
     company = models.ForeignKey(Company, null=True, blank=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f"{self.user} {self.vehicle_type}"
+
 
     def next_charge(self):
         return Charge.objects.get(status="Created", vehicle=self)
@@ -24,9 +29,6 @@ class Vehicle(models.Model):
         charge.end_time = timezone.now()
         charge.status = "Cancelled"
         charge.save()
-
-    def __str__(self):
-        return f"{self.vehicle.user} {self.vehicle.vehicle_type}"
 
 
 class Charge(models.Model):

@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 
-from projects.company import views
+from projects.charge.views import vehicle_list, vehicle_detail
+from projects.company.views import company_list, company_detail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^api/company/$', views.company_list),
-    re_path(r'^api/company/([0-9])$', views.company_detail),
+    re_path(r'^api/company/$', company_list),
+    re_path(r'^api/company/([0-9])$', company_detail),
+    re_path(r'^api/vehicle/$', vehicle_list),
+    re_path(r'^api/vehicle/([0-9])$', vehicle_detail),
 ]

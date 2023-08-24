@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from projects.charge.models import Vehicle, Charge
+
+admin.site.register(Vehicle)
+admin.site.register(Charge)
