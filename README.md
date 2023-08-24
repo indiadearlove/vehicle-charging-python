@@ -11,7 +11,7 @@ npm start
 - Go to http://localhost:8000/admin/auth/user/ and add a user
 - Add a company http://localhost:8000/admin/company/company/
 - Add vehicles through the django admin
-  Note: I've hard coded in the vehcile id 2 so you will need to create 2 vehicles
+  Note: I've hard coded in the vehicle id 2 so you will need to create 2 vehicles
 - Add charges through the django admin
   Note: If there are no charges for a vehicle then the car is not plugged in so the dashboard will be empty
 - Go to http://localhost:3000/
@@ -26,7 +26,7 @@ npm start
 
 ### Assumptions made
 
-- Individual companies would want thier own styling
+- Individual companies would want their own styling
 - Users would use mobile or a small device
 - Battery charging is linear
 
@@ -45,7 +45,7 @@ npm start
 
 ### how you designed the system bearing in mind its end use
 
-- Thought about scalibility
+- Thought about scalability
 - In the backend I followed Python and Django coding standards
 - I added certain fields to models they weren't needed at this stage but it would be good for us to have that data in the future
 - The little frontend I did was with mobile first in mind as assume that is what the user would want
