@@ -2,6 +2,7 @@
 
 ```
 pip install -r requirements.txt
+python manage.py migrate
 python manage.py runserver
 
 npm install bootstrap reactstrap axios --save
