@@ -54,9 +54,16 @@ class Charge(models.Model):
 
     # Other possible fields
 
+    # foreign key to schedule so you know if it has been created automatically
     # extra statuses e.g. saying what user cancelled a charge/overwrote a charge
     # when the charge was created
 
     def __str__(self):
         if self.vehicle:
             return f"{self.vehicle.user} {self.vehicle.vehicle_type} - {self.status}"
+
+# class Schedule(models.Model):
+    # company or vehicle
+    # status
+    # start time
+    # duration
