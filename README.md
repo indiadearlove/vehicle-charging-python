@@ -10,8 +10,9 @@ npm install bootstrap reactstrap axios --save
 npm start
 ```
 
-- Go to http://localhost:3000/
-  
+- Go to http://localhost:3000/ to view app
+
+- View django admin http://localhost:8000/
 
 ### Technologies used
 
